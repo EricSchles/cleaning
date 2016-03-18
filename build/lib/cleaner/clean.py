@@ -11,17 +11,18 @@ def get_directories(root):
 def traverse(directory,directories_traversed,extension):
     directory = os.path.abspath(directory)
     if not directory in directories_traversed:
-        directories = delete(directory,extension)
+        delete(directory,extension)
         directories_traversed.append(directory)
+        directories = get_directories(directory)
         for folder in directories:
-            return traverse(folder,directories_traversed,extension)
+            traverse(folder,directories_traversed,extension)
             
 def delete(directory,extension):
-    os.chdir(directory)
-    filelist = glob.glob("*"+extension)
+    print directory
+    filelist = glob.glob(directory+"/*"+extension)
+    print filelist
     for f in filelist:
+        f = os.path.abspath(f)
+        print "deleting",f
         os.remove(f)
-    directories = [os.path.abspath(f) for f in glob.glob("*") if os.path.isdir(f)]
-    os.chdir("..")
-    return directories
-    
+     
